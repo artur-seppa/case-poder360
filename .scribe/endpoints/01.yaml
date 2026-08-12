@@ -34,8 +34,20 @@ endpoints:
         exampleWasSpecified: true
         nullable: false
         deprecated: false
+      page:
+        custom: []
+        name: page
+        description: 'O número da página a ser exibida.'
+        required: false
+        example: 2
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
     cleanQueryParameters:
       status: pendente
+      page: 2
     bodyParameters:
       status:
         custom: []
@@ -52,7 +64,7 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      status: concluida
+      status: em_andamento
     fileParameters: []
     responses:
       -

@@ -36,6 +36,7 @@ class TaskController extends Controller
      * @group Tarefas
      *
      * @queryParam status string Filtra por status. Valores possíveis: `pendente`, `em_andamento`, `concluida`. Example: pendente
+     * @queryParam page integer O número da página a ser exibida. Example: 2
      */
     public function index(IndexTaskRequest $request): AnonymousResourceCollection
     {

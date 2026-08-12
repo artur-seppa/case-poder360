@@ -118,6 +118,100 @@ endpoints:
   -
     custom: []
     httpMethods:
+      - PUT
+    uri: api/v1/user/password
+    metadata:
+      custom: []
+      groupName: Autenticação
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Troca a senha do usuário autenticado.'
+      description: |-
+        Revoga todos os tokens de acesso e refresh tokens existentes
+        (incluindo o token usado nesta própria requisição) — é preciso
+        chamar `login` de novo depois.
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      current_password:
+        custom: []
+        name: current_password
+        description: 'A senha atual.'
+        required: true
+        example: password
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      password:
+        custom: []
+        name: password
+        description: 'A nova senha, mínimo de 8 caracteres.'
+        required: true
+        example: nova-senha-123
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      password_confirmation:
+        custom: []
+        name: password_confirmation
+        description: 'Precisa repetir a nova senha.'
+        required: true
+        example: nova-senha-123
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      current_password: password
+      password: nova-senha-123
+      password_confirmation: nova-senha-123
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 204
+        content: ''
+        headers:
+          cache-control: 'no-cache, private'
+          access-control-allow-origin: '*'
+        description: null
+      -
+        custom: []
+        status: 422
+        content: |-
+          {
+            "message": "Os dados enviados são inválidos.",
+            "errors": {
+              "current_password": ["The current password is incorrect."]
+            }
+          }
+        headers: []
+        description: 'Senha atual incorreta'
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
       - POST
     uri: api/v1/auth/register
     metadata:
@@ -419,6 +513,165 @@ endpoints:
       - headers
       - Authorization
       - 'Bearer 6g43cv8PD1aE5beadkZfhV6'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/auth/forgot-password
+    metadata:
+      custom: []
+      groupName: Autenticação
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Envia um e-mail com o link/token pra resetar a senha.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        custom: []
+        name: email
+        description: ''
+        required: true
+        example: demo@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      email: demo@example.com
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 500
+        content: |-
+          {
+              "message": "Server Error"
+          }
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '5'
+          x-ratelimit-remaining: '1'
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/v1/auth/reset-password
+    metadata:
+      custom: []
+      groupName: Autenticação
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Reseta a senha usando o token recebido por e-mail.'
+      description: 'Não autentica automaticamente — chame `login` depois com a nova senha.'
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      token:
+        custom: []
+        name: token
+        description: 'O token recebido por e-mail.'
+        required: true
+        example: architecto
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      email:
+        custom: []
+        name: email
+        description: ''
+        required: true
+        example: demo@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      password:
+        custom: []
+        name: password
+        description: 'A nova senha, mínimo de 8 caracteres.'
+        required: true
+        example: nova-senha-123
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      password_confirmation:
+        custom: []
+        name: password_confirmation
+        description: 'Precisa repetir a nova senha.'
+        required: true
+        example: nova-senha-123
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      token: architecto
+      email: demo@example.com
+      password: nova-senha-123
+      password_confirmation: nova-senha-123
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 422
+        content: |-
+          {
+            "message": "Os dados enviados são inválidos.",
+            "errors": {
+              "email": ["This password reset token is invalid."]
+            }
+          }
+        headers: []
+        description: 'Token inválido ou expirado'
+      -
+        custom: []
+        status: 422
+        content: '{"message":"Os dados enviados são inválidos.","errors":{"email":["This password reset token is invalid."]}}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '5'
+          x-ratelimit-remaining: '0'
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
     controller: null
     method: null
     route: null

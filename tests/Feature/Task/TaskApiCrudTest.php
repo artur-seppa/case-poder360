@@ -24,6 +24,26 @@ it('lists only the authenticated user tasks via API', function () {
     $response->assertJsonFragment(['title' => 'Minha tarefa']);
 });
 
+it('paginates tasks via API', function () {
+    $user = authenticatedApiUser();
+    Task::factory()->for($user)->count(20)->create();
+
+    $firstPage = $this->getJson('/api/v1/tasks');
+
+    $firstPage->assertOk();
+    $firstPage->assertJsonCount(15, 'data');
+    $firstPage->assertJsonPath('meta.current_page', 1);
+    $firstPage->assertJsonPath('meta.last_page', 2);
+    $firstPage->assertJsonPath('meta.per_page', 15);
+    $firstPage->assertJsonPath('meta.total', 20);
+
+    $secondPage = $this->getJson('/api/v1/tasks?page=2');
+
+    $secondPage->assertOk();
+    $secondPage->assertJsonCount(5, 'data');
+    $secondPage->assertJsonPath('meta.current_page', 2);
+});
+
 it('filters tasks by status via API', function () {
     $user = authenticatedApiUser();
     Task::factory()->for($user)->create(['status' => TaskStatus::Pendente->value]);
