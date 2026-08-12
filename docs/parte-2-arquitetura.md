@@ -12,7 +12,7 @@ A resposta abaixo desenvolve os mesmos conceitos de arquitetura orientada a
 eventos, mas já aterrissados numa stack concreta: **Redis Streams** como
 broker de eventos, **Redis Pub/Sub** como camada de fan-out interno, e
 **Laravel Reverb** (com **Horizon** para observabilidade) como cluster de
-gateways WebSocket, o mesmo ecossistema já usado na Parte 1 deste teste.
+gateways WebSocket.
 
 ## Visão geral do fluxo
 
@@ -126,7 +126,7 @@ balancer, todas compartilhando o mesmo Redis como scaling backplane. Cada nó
 só conhece as conexões que ele mesmo aceitou; escalar é subir mais nós
 Reverb, sem coordenação forte entre eles. No cliente, Laravel Echo assina
 canais **públicos** segmentados por tópico (ex. por UF e cargo), sem exigir
-autorização por usuário como na Parte 1. Assim, cada usuário só recebe as
+autorização por usuário. Assim, cada usuário só recebe as
 atualizações que está acompanhando, o que corta volume desnecessário de
 mensagens por nó. Um canal privado obrigaria o cliente a chamar
 `/broadcasting/auth` a cada subscribe (inclusive em toda reconexão, já que o
